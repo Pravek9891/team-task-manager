@@ -7,7 +7,7 @@ Production-ready full-stack web application for managing team projects and tasks
 | Layer | Technology |
 |---|---|
 | Backend | Django 4.2 + Django REST Framework |
-| Database | PostgreSQL (SQLite for local dev) |
+| Database | SQLite (built-in, no separate server needed) |
 | Auth | JWT (access + refresh tokens via SimpleJWT) |
 | Frontend | React + Vite |
 | Deployment | Railway (backend + DB), Vercel (frontend) |

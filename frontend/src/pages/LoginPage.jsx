@@ -6,31 +6,22 @@ export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const from = location.state?.from?.pathname || '/dashboard';
+
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const from = location.state?.from?.pathname || '/dashboard';
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setError('');
-  };
+  const set = (k) => (e) => { setForm((p) => ({ ...p, [k]: e.target.value })); setError(''); };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
     try {
       await login(form);
       navigate(from, { replace: true });
     } catch (err) {
-      const data = err.response?.data;
-      if (data?.detail) {
-        setError(data.detail);
-      } else {
-        setError('Invalid email or password. Please try again.');
-      }
+      setError(err.response?.data?.detail || 'Invalid email or password.');
     } finally {
       setLoading(false);
     }
@@ -39,31 +30,25 @@ export default function LoginPage() {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <div className="auth-logo">
-          <div className="auth-logo-icon">⚡</div>
-        </div>
+        <div className="auth-mark">⚡</div>
+        <h1 className="auth-title">Sign in</h1>
+        <p className="auth-subtitle">Welcome back to TaskFlow</p>
 
-        <h1 className="auth-title">Welcome back</h1>
-        <p className="auth-subtitle">Sign in to your TaskFlow account</p>
-
-        {error && (
-          <div className="alert alert-error" style={{ marginBottom: 'var(--space-4)' }}>
-            ⚠️ {error}
-          </div>
-        )}
+        {error && <div className="alert alert-error" style={{ marginBottom: 16 }}>{error}</div>}
 
         <form className="auth-form" onSubmit={handleSubmit} id="login-form">
           <div className="form-group">
-            <label className="form-label" htmlFor="login-email">Email address</label>
+            <label className="form-label" htmlFor="login-email">Email</label>
             <input
               id="login-email"
               type="email"
               name="email"
               placeholder="you@company.com"
               value={form.email}
-              onChange={handleChange}
+              onChange={set('email')}
               required
               autoComplete="email"
+              autoFocus
             />
           </div>
 
@@ -75,27 +60,19 @@ export default function LoginPage() {
               name="password"
               placeholder="••••••••"
               value={form.password}
-              onChange={handleChange}
+              onChange={set('password')}
               required
               autoComplete="current-password"
             />
           </div>
 
-          <button
-            id="login-submit"
-            type="submit"
-            className="btn btn-primary btn-block"
-            disabled={loading}
-          >
-            {loading ? <><span className="spinner" style={{ width: 16, height: 16 }} /> Signing in...</> : 'Sign In'}
+          <button id="login-submit" type="submit" className="btn btn-primary btn-block" disabled={loading}>
+            {loading ? <><span className="spinner" style={{ width: 14, height: 14 }} /> Signing in…</> : 'Sign in'}
           </button>
         </form>
 
-        <div className="auth-divider">or</div>
-
-        <p style={{ textAlign: 'center', fontSize: 'var(--font-size-sm)', color: 'var(--color-text-muted)' }}>
-          Don't have an account?{' '}
-          <Link to="/signup" id="goto-signup">Create one</Link>
+        <p className="auth-foot">
+          Don't have an account? <Link to="/signup" id="goto-signup">Create one</Link>
         </p>
       </div>
     </div>

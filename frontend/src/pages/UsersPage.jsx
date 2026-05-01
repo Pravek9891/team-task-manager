@@ -26,14 +26,14 @@ export default function UsersPage() {
       <div className="filters-bar">
         <input
           type="text"
-          placeholder="🔍 Search users..."
+          placeholder="Search by name or email…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           id="user-search"
-          style={{ minWidth: 260 }}
+          style={{ minWidth: 250 }}
         />
-        <span style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-sm)', marginLeft: 'auto' }}>
-          {filtered.length} user{filtered.length !== 1 ? 's' : ''}
+        <span style={{ color: 'var(--text-2)', fontSize: 12.5, marginLeft: 'auto' }}>
+          {filtered.length} {filtered.length === 1 ? 'user' : 'users'}
         </span>
       </div>
 
@@ -46,36 +46,34 @@ export default function UsersPage() {
           <table id="users-table">
             <thead>
               <tr>
-                <th>User</th>
+                <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
-                <th>Member Since</th>
+                <th>Joined</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((u) => (
                 <tr key={u.id} id={`user-row-${u.id}`}>
                   <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
-                      <div className="user-avatar" style={{ width: 32, height: 32, fontSize: '12px' }}>
-                        {(u.full_name?.[0] || u.email[0]).toUpperCase()}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div className="user-avatar" style={{ width: 28, height: 28, fontSize: 11 }}>
+                        {(u.full_name || u.email).slice(0, 2).toUpperCase()}
                       </div>
-                      <span style={{ fontWeight: 500 }}>{u.full_name || '—'}</span>
+                      <span style={{ fontWeight: 500, fontSize: 13 }}>{u.full_name || '—'}</span>
                     </div>
                   </td>
-                  <td style={{ color: 'var(--color-text-muted)' }}>{u.email}</td>
-                  <td>
-                    <span className={`badge badge-${u.role.toLowerCase()}`}>{u.role}</span>
-                  </td>
-                  <td style={{ color: 'var(--color-text-muted)' }}>
-                    {new Date(u.date_joined).toLocaleDateString()}
+                  <td style={{ color: 'var(--text-2)', fontSize: 13 }}>{u.email}</td>
+                  <td><span className={`badge badge-${u.role.toLowerCase()}`}>{u.role}</span></td>
+                  <td style={{ color: 'var(--text-2)', fontSize: 12.5 }}>
+                    {new Date(u.date_joined).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </td>
                 </tr>
               ))}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={4} style={{ textAlign: 'center', color: 'var(--color-text-muted)', padding: 'var(--space-8)' }}>
-                    No users found.
+                  <td colSpan={4} style={{ textAlign: 'center', color: 'var(--text-2)', padding: 40 }}>
+                    No users match your search.
                   </td>
                 </tr>
               )}
