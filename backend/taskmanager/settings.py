@@ -28,7 +28,7 @@ SECRET_KEY = env('SECRET_KEY', default='django-insecure-change-me-in-production-
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS')
-
+ALLOWED_HOSTS.extend(['healthcheck.railway.app', '.railway.app'])
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
