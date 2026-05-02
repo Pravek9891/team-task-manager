@@ -1,2 +1,2 @@
-release: python manage.py migrate && python manage.py collectstatic --noinput
+release: python manage.py migrate && python manage.py shell -c "from accounts.models import User; User.objects.filter(email='admin@test.com').exists() or User.objects.create_superuser('admin@test.com', 'Admin123!', first_name='System', last_name='Admin')" && python manage.py collectstatic --noinput
 web: gunicorn taskmanager.wsgi --log-file -
