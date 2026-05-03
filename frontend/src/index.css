@@ -80,6 +80,15 @@ input, textarea, select {
   -webkit-appearance: none;
 }
 
+input[type="checkbox"], input[type="radio"] {
+  -webkit-appearance: auto;
+  appearance: auto;
+  width: auto;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
 input::placeholder, textarea::placeholder { color: var(--text-3); }
 
 input:focus, textarea:focus, select:focus {

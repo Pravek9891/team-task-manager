@@ -58,6 +58,26 @@ class ProjectCreateSerializer(serializers.ModelSerializer):
                 ProjectMember.objects.get_or_create(project=project, user=user)
         return project
 
+    def update(self, instance, validated_data):
+        member_ids = validated_data.pop('member_ids', None)
+        
+        # Update standard fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # Update memberships if provided
+        if member_ids is not None:
+            from accounts.models import User
+            # Remove all existing members
+            instance.memberships.all().delete()
+            # Add new members
+            users = User.objects.filter(id__in=member_ids)
+            for user in users:
+                ProjectMember.objects.create(project=instance, user=user)
+                
+        return instance
+
 
 class AddMemberSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
