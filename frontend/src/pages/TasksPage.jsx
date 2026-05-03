@@ -229,9 +229,11 @@ export default function TasksPage() {
     <AppLayout
       title="Tasks"
       actions={
-        <button className="btn btn-primary btn-sm" onClick={openCreate} id="create-task-btn">
-          + New task
-        </button>
+        isAdmin && (
+          <button className="btn btn-primary btn-sm" onClick={openCreate} id="create-task-btn">
+            + New task
+          </button>
+        )
       }
     >
       {/* Filters */}
